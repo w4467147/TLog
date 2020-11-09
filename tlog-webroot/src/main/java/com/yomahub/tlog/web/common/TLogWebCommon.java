@@ -24,15 +24,20 @@ public class TLogWebCommon {
             String traceId = request.getHeader(TLogConstants.TLOG_TRACE_KEY);
             String spanId = request.getHeader(TLogConstants.TLOG_SPANID_KEY);
             String preIvkApp = request.getHeader(TLogConstants.PRE_IVK_APP_KEY);
+            String preIvkHost = request.getHeader(TLogConstants.PRE_IVK_APP_HOST);
             String preIp = request.getHeader(TLogConstants.PRE_IP_KEY);
             if (StringUtils.isBlank(preIvkApp)) {
                 preIvkApp = TLogConstants.UNKNOWN;
+            }
+            if (StringUtils.isBlank(preIvkHost)) {
+                preIvkHost = TLogConstants.UNKNOWN;
             }
             if (StringUtils.isBlank(preIp)) {
                 preIp = TLogConstants.UNKNOWN;
             }
 
             TLogContext.putPreIvkApp(preIvkApp);
+            TLogContext.putPreIvkHost(preIvkHost);
             TLogContext.putPreIp(preIp);
 
             if (StringUtils.isBlank(traceId)) {
@@ -47,7 +52,7 @@ public class TLogWebCommon {
             TLogContext.putTraceId(traceId);
 
             //生成日志标签
-            String tlogLabel = TLogLabelGenerator.generateTLogLabel(preIvkApp, preIp, traceId, TLogContext.getSpanId());
+            String tlogLabel = TLogLabelGenerator.generateTLogLabel(preIvkApp, preIvkHost, preIp, traceId, TLogContext.getSpanId());
 
             //往日志切面器里放一个日志标签
             AspectLogContext.putLogValue(tlogLabel);
@@ -63,6 +68,7 @@ public class TLogWebCommon {
         if (handler instanceof HandlerMethod) {
             //移除ThreadLocal里的数据
             TLogContext.removePreIvkApp();
+            TLogContext.removePreIvkHost();
             TLogContext.removePreIp();
             TLogContext.removeTraceId();
             TLogContext.removeSpanId();
