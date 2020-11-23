@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
+import java.net.InetAddress;
+
 /**
  * dubbo的调用拦截器
  *
@@ -98,7 +100,11 @@ public class TLogDubboFilter implements Filter {
             if (StringUtils.isNotBlank(traceId)) {
                 String appName = invoker.getUrl().getParameter(CommonConstants.APPLICATION_KEY);
                 String ip = NetUtil.getLocalhostStr();
-                String hostName = NetUtil.getLocalhost().getHostName();
+                String hostName = TLogConstants.UNKNOWN;
+                try{
+                    hostName = InetAddress.getLocalHost().getHostName();
+                }catch (Exception e){
+                }
 
                 RpcContext.getContext().setAttachment(TLogConstants.TLOG_TRACE_KEY, traceId);
                 RpcContext.getContext().setAttachment(TLogConstants.PRE_IVK_APP_KEY, appName);

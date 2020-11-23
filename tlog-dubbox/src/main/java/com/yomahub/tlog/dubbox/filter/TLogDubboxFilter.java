@@ -100,7 +100,11 @@ public class TLogDubboxFilter implements Filter {
             if (StringUtils.isNotBlank(traceId)) {
                 String appName = invoker.getUrl().getParameter(Constants.APPLICATION_KEY);
                 String ip = NetUtil.getLocalhostStr();
-                String hostName = NetUtil.getLocalhost().getHostName();
+                String hostName = TLogConstants.UNKNOWN;
+                try{
+                    hostName = InetAddress.getLocalHost().getHostName();
+                }catch (Exception e){
+                }
 
                 RpcContext.getContext().setAttachment(TLogConstants.TLOG_TRACE_KEY, traceId);
                 RpcContext.getContext().setAttachment(TLogConstants.PRE_IVK_APP_KEY, appName);

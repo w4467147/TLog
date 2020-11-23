@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.net.InetAddress;
+
 /**
  * feign的拦截器
  * @author Bryan.Zhang
@@ -29,10 +31,17 @@ public class TLogFeignFilter implements RequestInterceptor {
         String traceId = TLogContext.getTraceId();
 
         if(StringUtils.isNotBlank(traceId)){
+            String hostName = TLogConstants.UNKNOWN;
+            try{
+                hostName = InetAddress.getLocalHost().getHostName();
+            }catch (Exception e){
+            }
+
             requestTemplate.header(TLogConstants.TLOG_TRACE_KEY, traceId);
             requestTemplate.header(TLogConstants.TLOG_SPANID_KEY, SpanIdGenerator.generateNextSpanId());
             requestTemplate.header(TLogConstants.PRE_IVK_APP_KEY, appName);
             requestTemplate.header(TLogConstants.PRE_IP_KEY, NetUtil.getLocalhostStr());
+            requestTemplate.header(TLogConstants.PRE_IVK_APP_HOST, hostName);
         }else{
             log.debug("[TLOG]本地threadLocal变量没有正确传递traceId,本次调用不传递traceId");
         }
