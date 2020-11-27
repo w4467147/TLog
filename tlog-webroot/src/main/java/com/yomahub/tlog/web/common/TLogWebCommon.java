@@ -25,6 +25,9 @@ public class TLogWebCommon {
             String spanId = request.getHeader(TLogConstants.TLOG_SPANID_KEY);
             String preIvkApp = request.getHeader(TLogConstants.PRE_IVK_APP_KEY);
             String preIp = request.getHeader(TLogConstants.PRE_IP_KEY);
+
+            log.info("[TLOG_DEBUG]接受到主要标签的值为<{}><{}>",spanId,traceId);
+
             if (StringUtils.isBlank(preIvkApp)) {
                 preIvkApp = TLogConstants.UNKNOWN;
             }
@@ -51,6 +54,8 @@ public class TLogWebCommon {
 
             //往日志切面器里放一个日志标签
             AspectLogContext.putLogValue(tlogLabel);
+
+            log.info("[TLOG_DEBUG]把标签放入上下文中，标签为：{}",tlogLabel);
 
             //如果有MDC，则往MDC中放入日志标签
             if(TLogContext.hasTLogMDC()){

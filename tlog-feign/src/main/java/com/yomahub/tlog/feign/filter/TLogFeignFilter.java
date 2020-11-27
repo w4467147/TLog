@@ -29,9 +29,12 @@ public class TLogFeignFilter implements RequestInterceptor {
 
         if(StringUtils.isNotBlank(traceId)){
             requestTemplate.header(TLogConstants.TLOG_TRACE_KEY, traceId);
-            requestTemplate.header(TLogConstants.TLOG_SPANID_KEY, SpanIdGenerator.generateNextSpanId());
+            String spanId = SpanIdGenerator.generateNextSpanId();
+            requestTemplate.header(TLogConstants.TLOG_SPANID_KEY, spanId);
             requestTemplate.header(TLogConstants.PRE_IVK_APP_KEY, appName);
             requestTemplate.header(TLogConstants.PRE_IP_KEY, NetUtil.getLocalhostStr());
+
+            log.info("[TLOG_DEBUG]成功传入标签，<{}><{}>",spanId,traceId);
         }else{
             log.debug("[TLOG]本地threadLocal变量没有正确传递traceId,本次调用不传递traceId");
         }
