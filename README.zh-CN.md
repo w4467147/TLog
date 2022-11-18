@@ -42,6 +42,7 @@ TLog是一个轻量级的分布式日志标记追踪神器，10分钟即可接�
 | TLog GVP 项目 | [https://gitee.com/dromara/TLog](https://gitee.com/dromara/TLog) | 一个轻量级的分布式日志标记追踪神器，10分钟即可接入，自动对日志打标签完成微服务的链路追踪 |
 | Sa-Token | [https://gitee.com/dromara/sa-token](https://gitee.com/dromara/sa-token) | 这可能是史上功能最全的 Java 权限认证框架！ |
 | SpringBoot_v2      | [https://gitee.com/bdj/SpringBoot_v2](https://gitee.com/bdj/SpringBoot_v2) | 基于springboot的一款纯净脚手架|
+| Jpom | [https://gitee.com/dromara/Jpom](https://gitee.com/dromara/Jpom) | 简而轻的低侵入式在线构建、自动部署、日常运维、项目监控软件。 |
 
 ## 开源不易，支持就请赞助TLog
 
