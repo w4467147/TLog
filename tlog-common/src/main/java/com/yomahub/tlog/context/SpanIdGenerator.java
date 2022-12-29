@@ -1,44 +1,41 @@
 package com.yomahub.tlog.context;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.ttl.TransmittableThreadLocal;
 import org.apache.commons.lang3.StringUtils;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * spanId生成器
+ *
  * @author Bryan.Zhang
- * @since 2020/9/23
+ * @since 1.0.0
  */
 public class SpanIdGenerator {
 
-    private static InheritableThreadLocal<String> currentSpanIdTL = new InheritableThreadLocal<>();
+    public static volatile TransmittableThreadLocal<String> currentSpanIdTL = new TransmittableThreadLocal<>();
 
-    private static InheritableThreadLocal<Integer> spanIndex = new InheritableThreadLocal<>();
+    public static volatile TransmittableThreadLocal<AtomicInteger> spanIndex = new TransmittableThreadLocal<>();
 
-    private static String INITIAL_VALUE = "0";
-
-    public static void putSpanId(String spanId){
-        if(StringUtils.isBlank(spanId)){
-            spanId = INITIAL_VALUE;
+    public static void putSpanId(String spanId) {
+        if (StringUtils.isBlank(spanId)) {
+            spanId = "0";
         }
         currentSpanIdTL.set(spanId);
-        spanIndex.set(Integer.valueOf(INITIAL_VALUE));
+        spanIndex.set(new AtomicInteger(0));
     }
 
-    public static String getSpanId(){
+    public static String getSpanId() {
         return currentSpanIdTL.get();
     }
 
-    public static void removeSpanId(){
+    public static void removeSpanId() {
         currentSpanIdTL.remove();
     }
 
-    public static String generateNextSpanId(){
-        //只在同一个request请求里进行线程安全操作
-        synchronized (TLogContext.getTraceId()){
-            String currentSpanId = TLogContext.getSpanId();
-            spanIndex.set(spanIndex.get()+1);
-            String nextSpanId = StrUtil.format("{}.{}", currentSpanId, spanIndex.get());
-            return nextSpanId;
-        }
+    public static String generateNextSpanId() {
+        String currentSpanId = TLogContext.getSpanId();
+        int currentSpanIndex = spanIndex.get().incrementAndGet();
+        return StrUtil.format("{}.{}", currentSpanId, currentSpanIndex);
     }
 }

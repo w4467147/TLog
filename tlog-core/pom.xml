@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.yomahub</groupId>
         <artifactId>tlog</artifactId>
-        <version>1.1.1</version>
+        <version>1.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,18 +13,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons.lang3.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>${commons-collections.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>com.yomahub</groupId>
+            <artifactId>tlog-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>
@@ -43,9 +34,10 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
         </dependency>
+
         <!-- slf4j api包 -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -84,6 +76,16 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <optional>true</optional>
+        </dependency>
+        <!-- spring的依赖包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>QLExpress</artifactId>
         </dependency>
     </dependencies>
 </project>
