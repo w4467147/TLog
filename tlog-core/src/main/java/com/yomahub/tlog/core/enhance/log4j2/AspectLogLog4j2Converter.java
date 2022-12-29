@@ -16,8 +16,12 @@
  */
 package com.yomahub.tlog.core.enhance.log4j2;
 
+import cn.hutool.core.util.StrUtil;
+import com.yomahub.tlog.constant.TLogConstants;
+import com.yomahub.tlog.context.TLogContext;
 import com.yomahub.tlog.core.context.AspectLogContext;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
@@ -33,10 +37,13 @@ import org.apache.logging.log4j.util.StringBuilderFormattable;
 import java.util.Locale;
 
 /**
+ * log4j2的日志适配器，log4j2会自动加载插件，不需要额外配置
+ *
  * @author Bryan.Zhang
+ * @since 1.0.0
  */
 @Plugin(name = "AspectLogLog4j2Converter", category = PatternConverter.CATEGORY)
-@ConverterKeys({ "m", "msg", "message", "tm", "tmsg", "tmessage" })
+@ConverterKeys({"m", "msg", "message", "tm", "tmsg", "tmessage", "tl"})
 @PerformanceSensitive("allocation")
 public final class AspectLogLog4j2Converter extends LogEventPatternConverter {
 
@@ -50,8 +57,7 @@ public final class AspectLogLog4j2Converter extends LogEventPatternConverter {
     /**
      * Private constructor.
      *
-     * @param options
-     *            options, may be null.
+     * @param options options, may be null.
      */
     private AspectLogLog4j2Converter(final Configuration config, final String[] options) {
         super("Message", "message");
@@ -96,10 +102,8 @@ public final class AspectLogLog4j2Converter extends LogEventPatternConverter {
     /**
      * Obtains an instance of pattern converter.
      *
-     * @param config
-     *            The Configuration.
-     * @param options
-     *            options, may be null.
+     * @param config  The Configuration.
+     * @param options options, may be null.
      * @return instance of pattern converter.
      */
     public static AspectLogLog4j2Converter newInstance(final Configuration config, final String[] options) {
@@ -111,9 +115,16 @@ public final class AspectLogLog4j2Converter extends LogEventPatternConverter {
      */
     @Override
     public void format(final LogEvent event, final StringBuilder toAppendTo) {
-        String prefix = AspectLogContext.getLogValue();
-        if(StringUtils.isNotBlank(prefix)){
-            toAppendTo.append(prefix + " ");
+        String logLable = event.getContextData().getValue(TLogConstants.MDC_KEY);
+
+        if (StrUtil.isBlank(logLable)){
+            logLable = AspectLogContext.getLogValue();
+        }
+
+        if (!TLogContext.hasTLogMDC()) {
+            if (StrUtil.isNotBlank(logLable)) {
+                toAppendTo.append(StrUtil.format("{} ", logLable));
+            }
         }
         final Message msg = event.getMessage();
         if (msg instanceof StringBuilderFormattable) {

@@ -6,7 +6,7 @@
     <groupId>com.yomahub</groupId>
     <artifactId>tlog</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.1</version>
+    <version>1.5.1</version>
     <name>tlog</name>
     <description>a lightweight log tracking framework</description>
     <url>https://github.com/bryan31/TLog</url>
@@ -40,62 +40,88 @@
     </scm>
 
     <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <commons.lang3.version>3.4</commons.lang3.version>
         <commons-collections.version>4.1</commons-collections.version>
+        <spring.version>5.0.9.RELEASE</spring.version>
         <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
-        <fastjson.version>1.2.7</fastjson.version>
-        <guava.version>19.0</guava.version>
         <dubbox.version>2.8.4</dubbox.version>
         <dubbo.version>2.7.6</dubbo.version>
-        <hutool-core.version>5.3.10</hutool-core.version>
+        <hutool.version>5.8.6</hutool.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <commons-logging.version>1.2</commons-logging.version>
-        <dom4j.version>1.6.1</dom4j.version>
+        <dom4j.version>2.1.3</dom4j.version>
         <javassist.version>3.22.0-GA</javassist.version>
         <aspectj.version>1.8.13</aspectj.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
-        <log4j2.version>2.9.1</log4j2.version>
+        <log4j2.version>2.12.0</log4j2.version>
+        <ttl.version>2.12.2</ttl.version>
+        <quartz.version>2.3.0</quartz.version>
+        <httpclient.version>4.5.10</httpclient.version>
+        <httpclient5.version>5.1</httpclient5.version>
+        <okhttp.version>3.2.0</okhttp.version>
+        <forest.version>1.5.14</forest.version>
+        <xxl-job.version>2.3.0</xxl-job.version>
+        <qlexpress.version>3.2.0</qlexpress.version>
+        <logstash-logback.version>6.6</logstash-logback.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- spring相关包的依赖 -->
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <!-- 其他的依赖包 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang3.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>${dubbox.version}</version>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.hutool</groupId>
-                <artifactId>hutool-core</artifactId>
-                <version>${hutool-core.version}</version>
+                <artifactId>hutool-http</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
             <dependency>
-                <groupId>dom4j</groupId>
+                <groupId>org.dom4j</groupId>
                 <artifactId>dom4j</artifactId>
                 <version>${dom4j.version}</version>
             </dependency>
@@ -109,6 +135,44 @@
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${ttl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>QLExpress</artifactId>
+                <version>${qlexpress.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>log4j</artifactId>
+                        <groupId>log4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <!-- 开源社区的dubbo包 -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <!-- dubbox包 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbox.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
             <!-- slf4j api包 -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -120,34 +184,95 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
             </dependency>
             <!-- log4j的核心包 -->
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j-log4j12.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
             </dependency>
             <!-- log4j2的核心包 -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
                 <version>${log4j2.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
                 <version>${log4j2.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-slf4j-impl</artifactId>
                 <version>${log4j2.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
             </dependency>
+            <!-- xxljob依赖包 -->
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <!-- httpclient 4,5的依赖包 -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${httpclient5.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <!-- forest的依赖包 -->
+            <dependency>
+                <groupId>com.dtflys.forest</groupId>
+                <artifactId>forest-core</artifactId>
+                <version>${forest.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <!-- quartz的依赖包 -->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+            <!--logstash的核心包-->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback.version}</version>
+                <optional>true</optional>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- springboot依赖 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -155,6 +280,8 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- springCloud依赖 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -170,6 +297,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                     <source>${java.version}</source>
@@ -244,8 +372,19 @@
         <module>tlog-dubbox</module>
         <module>tlog-core</module>
         <module>tlog-feign</module>
+        <module>tlog-httpclient</module>
+        <module>tlog-okhttp</module>
         <module>tlog-all</module>
-        <module>tlog-all-spring-boot-starter</module>
+        <module>tlog-agent</module>
+        <module>tlog-gateway</module>
+        <module>tlog-webflux</module>
+        <module>tlog-spring-boot</module>
+        <module>tlog-task</module>
+        <module>tlog-xxl-job</module>
+        <module>tlog-hutool-http</module>
+        <module>tlog-forest</module>
+        <module>tlog-rest-template</module>
+        <module>tlog-logstash</module>
     </modules>
 
     <distributionManagement>
